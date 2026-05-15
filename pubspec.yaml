@@ -1,0 +1,7 @@
+name: locale_helper_workspace
+publish_to: none
+environment:
+  sdk: ^3.6.0
+workspace:
+  - packages/locale_helper_shared
+  - packages/locale_helper_cli

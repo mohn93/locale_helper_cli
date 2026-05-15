@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "appTitle": "Sample",
+  "@appTitle": {"description": "App title"},
+  "loginButton": "Sign in",
+  "logoutConfirm": "Are you sure you want to sign out?"
+}

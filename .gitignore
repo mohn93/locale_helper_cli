@@ -1,0 +1,10 @@
+.dart_tool/
+build/
+.packages
+pubspec.lock
+.idea/
+.vscode/
+*.iml
+.DS_Store
+.locale_helper.yaml
+!packages/locale_helper_cli/test/fixtures/**/.locale_helper.yaml
