@@ -32,7 +32,7 @@ void main() {
         '$packageRoot/test/fixtures/sample_app/lib/l10n/app_en.arb';
     final entries = loadArbFile(arbPath);
     expect(entries.map((e) => e.key).toList(),
-        ['appTitle', 'loginButton', 'logoutConfirm']);
+        ['appTitle', 'loginButton', 'logoutConfirm'],);
     expect(entries.first.arbMetadata['description'], 'App title');
   });
 }

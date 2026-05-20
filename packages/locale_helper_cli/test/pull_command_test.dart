@@ -25,7 +25,7 @@ void main() {
         ..headers.contentType = ContentType.json
         ..write(statusCode == 200
             ? jsonEncode({'currentValues': currentValues, 'changes': []})
-            : '{"error":"unauthorized"}');
+            : '{"error":"unauthorized"}',);
       await req.response.close();
     });
   }
@@ -52,7 +52,7 @@ void main() {
     await startServer(currentValues: {'hello': 'Hi there'});
     final tmp = await setupProject(arbContent: '''
 {"@@locale":"en","hello":"Hello","bye":"Goodbye"}
-''');
+''',);
     final backendUrl = 'http://localhost:${server.port}';
     ProjectConfig(
       backendUrl: backendUrl,
@@ -81,7 +81,7 @@ void main() {
     await startServer(currentValues: {'hello': 'Hi'});
     final tmp = await setupProject(arbContent: '''
 {"@@locale":"en","hello":"Hello"}
-''');
+''',);
     final backendUrl = 'http://localhost:${server.port}';
     ProjectConfig(
       backendUrl: backendUrl,
@@ -127,7 +127,7 @@ void main() {
     await startServer(currentValues: {'hello': 'Hi there'});
     final tmp = await setupProject(arbContent: '''
 {"@@locale":"en","hello":"Hey friend"}
-''');
+''',);
     // Seed a baseline that matches NEITHER local nor server, so both diverged.
     Directory('${tmp.path}/.locale_helper').createSync(recursive: true);
     File('${tmp.path}/.locale_helper/baseline.lock.json').writeAsStringSync(

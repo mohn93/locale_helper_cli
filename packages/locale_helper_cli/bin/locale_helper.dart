@@ -12,7 +12,7 @@ import 'package:locale_helper_cli/src/commands/status_command.dart';
 Future<void> main(List<String> args) async {
   if (args.isEmpty) {
     stderr.writeln(
-        'Usage: locale_helper <signup|login|logout|init|publish|pull|status>');
+        'Usage: locale_helper <signup|login|logout|init|publish|pull|status>',);
     exit(64);
   }
   final cmd = args.first;

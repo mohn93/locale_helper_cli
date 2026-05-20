@@ -26,7 +26,7 @@ class ProjectConfig {
     this.projectId,
     this.projectName,
   })  : assert(arbPattern != null || arbGlob != null,
-            'Either arbPattern or arbGlob must be provided'),
+            'Either arbPattern or arbGlob must be provided',),
         arbPattern = arbPattern ?? arbGlob!;
 
   /// Backwards-compatible getter for callers that still reference `arbGlob`.

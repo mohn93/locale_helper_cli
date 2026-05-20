@@ -24,7 +24,7 @@ class ApiClient {
       headers: {'content-type': 'application/json', ..._authHeaders},
       body: jsonEncode(
           SignupRequest(email: email, password: password, displayName: displayName)
-              .toJson()),
+              .toJson(),),
     );
     if (resp.statusCode != 201) {
       throw StateError('signup failed: ${resp.statusCode} ${resp.body}');
@@ -73,7 +73,7 @@ class ApiClient {
       throw StateError('publish failed: ${resp.statusCode} ${resp.body}');
     }
     return PublishResponse.fromJson(
-        jsonDecode(resp.body) as Map<String, dynamic>);
+        jsonDecode(resp.body) as Map<String, dynamic>,);
   }
 
   /// Fetch the current values map from the project's change log.

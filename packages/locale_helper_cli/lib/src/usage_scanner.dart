@@ -171,7 +171,7 @@ class _UsageVisitor extends RecursiveAstVisitor<void> {
       }
       if (a is InstanceCreationExpression) {
         final role = _widgetInvocationRoleHighPriority(
-          a.constructorName.type.name2.lexeme,
+          a.constructorName.type.name.lexeme,
         );
         if (role != null) return role;
       }
@@ -185,7 +185,7 @@ class _UsageVisitor extends RecursiveAstVisitor<void> {
         if (bare == 'Text') return Role.text;
       }
       if (a is InstanceCreationExpression) {
-        final n = a.constructorName.type.name2.lexeme;
+        final n = a.constructorName.type.name.lexeme;
         final bare = n.startsWith('_') ? n.substring(1) : n;
         if (bare == 'Text') return Role.text;
       }
@@ -200,7 +200,7 @@ class _UsageVisitor extends RecursiveAstVisitor<void> {
     final node = ancestors[index];
     if (node is MethodInvocation) return node.methodName.name;
     if (node is InstanceCreationExpression) {
-      return node.constructorName.type.name2.lexeme;
+      return node.constructorName.type.name.lexeme;
     }
     return null;
   }
@@ -248,7 +248,9 @@ class _UsageVisitor extends RecursiveAstVisitor<void> {
       'OutlinedButton',
       'IconButton',
       'MaterialButton',
-    ])) return Role.button;
+    ])) {
+      return Role.button;
+    }
     if (n.contains('Dialog') || n == 'SnackBar') return Role.dialog;
     return null;
   }

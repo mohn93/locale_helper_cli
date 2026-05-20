@@ -1,4 +1,4 @@
-library locale_helper_shared;
+library;
 
 export 'src/arb.dart';
 export 'src/auth_dtos.dart';

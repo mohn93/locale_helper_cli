@@ -15,7 +15,7 @@ class SignupCommand implements CliCommand {
         _clientFactory = clientFactory;
 
   ApiClient _makeClient(String url) =>
-      _clientFactory != null ? _clientFactory!(url) : ApiClient(backendUrl: url);
+      _clientFactory != null ? _clientFactory(url) : ApiClient(backendUrl: url);
 
   @override
   String get name => 'signup';
@@ -33,9 +33,9 @@ class SignupCommand implements CliCommand {
     final api = _makeClient(backendUrl);
     try {
       final auth = await api.signup(
-          email: email, password: password, displayName: displayName);
+          email: email, password: password, displayName: displayName,);
       credentialsStore.save(
-          backendUrl: backendUrl, email: auth.user.email, token: auth.token);
+          backendUrl: backendUrl, email: auth.user.email, token: auth.token,);
       stdout.writeln('Account created and signed in as ${auth.user.email}.');
       return 0;
     } catch (e) {
@@ -60,6 +60,6 @@ class SignupCommand implements CliCommand {
     stdin.echoMode = true;
     stdout.writeln();
     return runWithInputs(
-        backendUrl: url, email: email, password: password, displayName: displayName);
+        backendUrl: url, email: email, password: password, displayName: displayName,);
   }
 }

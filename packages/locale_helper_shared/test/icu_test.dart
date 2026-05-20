@@ -39,7 +39,7 @@ void main() {
   group('IcuMessage.parse — plural', () {
     test('simple plural with one + other', () {
       final m = IcuMessage.parse(
-          '{count, plural, one {{count} item} other {{count} items}}');
+          '{count, plural, one {{count} item} other {{count} items}}',);
       expect(m, isA<PluralMessage>());
       final p = m as PluralMessage;
       expect(p.variable, 'count');
@@ -53,7 +53,7 @@ void main() {
 
     test('plural with =0 exact match and CLDR forms', () {
       final m = IcuMessage.parse(
-          '{count, plural, =0 {No items} one {{count} item} other {{count} items}}');
+          '{count, plural, =0 {No items} one {{count} item} other {{count} items}}',);
       final p = m as PluralMessage;
       expect(p.exactForms.keys, [0]);
       final zero = p.exactForms[0]!;
@@ -63,7 +63,7 @@ void main() {
 
     test('plural with multiple =N exact matches', () {
       final m = IcuMessage.parse(
-          '{n, plural, =0 {zero} =1 {one literal} =42 {forty two} other {other}}');
+          '{n, plural, =0 {zero} =1 {one literal} =42 {forty two} other {other}}',);
       final p = m as PluralMessage;
       expect(p.exactForms.keys, containsAll([0, 1, 42]));
       expect(p.exactForms[42]!.toIcu(), 'forty two');
@@ -71,7 +71,7 @@ void main() {
 
     test('select message returns UnsupportedMessage', () {
       final m = IcuMessage.parse(
-          '{g, select, male {He} female {She} other {They}}');
+          '{g, select, male {He} female {She} other {They}}',);
       expect(m, isA<UnsupportedMessage>());
     });
   });

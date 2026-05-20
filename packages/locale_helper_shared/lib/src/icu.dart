@@ -2,6 +2,7 @@
 /// placeholders, and `{var, plural, ...}` with both `=N` exact selectors
 /// and CLDR keyword forms (zero/one/two/few/many/other). `{var, select,
 /// ...}` is out of scope — parses to [UnsupportedMessage].
+library;
 
 sealed class IcuMessage {
   const IcuMessage();

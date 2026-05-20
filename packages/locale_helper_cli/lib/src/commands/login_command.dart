@@ -15,7 +15,7 @@ class LoginCommand implements CliCommand {
         _clientFactory = clientFactory;
 
   ApiClient _makeClient(String url) =>
-      _clientFactory != null ? _clientFactory!(url) : ApiClient(backendUrl: url);
+      _clientFactory != null ? _clientFactory(url) : ApiClient(backendUrl: url);
 
   @override
   String get name => 'login';
@@ -33,7 +33,7 @@ class LoginCommand implements CliCommand {
     try {
       final auth = await api.login(email: email, password: password);
       credentialsStore.save(
-          backendUrl: backendUrl, email: auth.user.email, token: auth.token);
+          backendUrl: backendUrl, email: auth.user.email, token: auth.token,);
       stdout.writeln('Signed in as ${auth.user.email}.');
       return 0;
     } catch (e) {

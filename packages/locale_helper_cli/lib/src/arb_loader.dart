@@ -156,7 +156,7 @@ BundleInputs loadArbBundle(
       sourceValue: sourceValue,
       arbMetadata: meta,
       values: values,
-    ));
+    ),);
   }
 
   return BundleInputs(locales: locales, entries: entries);

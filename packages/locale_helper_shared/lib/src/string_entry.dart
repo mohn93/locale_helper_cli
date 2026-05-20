@@ -126,7 +126,7 @@ class StringEntry {
       icuKind: IcuKind.fromWire(json['icuKind'] as String?),
       placeholders: (json['placeholders'] as Map<String, dynamic>?)
               ?.map((k, v) => MapEntry(
-                  k, PlaceholderMeta.fromJson(v as Map<String, dynamic>))) ??
+                  k, PlaceholderMeta.fromJson(v as Map<String, dynamic>),),) ??
           const {},
     );
   }

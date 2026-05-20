@@ -67,7 +67,7 @@ void main() {
 
     final body = File(gitignorePath()).readAsStringSync();
     expect(body.startsWith(original), isTrue,
-        reason: 'Original content should be preserved verbatim at the top');
+        reason: 'Original content should be preserved verbatim at the top',);
     expect(body, contains('.locale_helper/'));
   });
 
@@ -84,7 +84,7 @@ void main() {
   });
 
   group('InitCommand.pickProjectFromList', () {
-    ProjectListItemDto _p(String id, String name, String role) =>
+    ProjectListItemDto p(String id, String name, String role) =>
         ProjectListItemDto(
           id: id,
           name: name,
@@ -108,7 +108,7 @@ void main() {
       final writes = <String>[];
       final answers = ['n'].iterator;
       final picked = InitCommand.pickProjectFromList(
-        [_p('a', 'Alpha', 'owner'), _p('b', 'Beta', 'reviewer')],
+        [p('a', 'Alpha', 'owner'), p('b', 'Beta', 'reviewer')],
         readLine: () => (answers..moveNext()).current,
         writeLine: writes.add,
       );
@@ -120,7 +120,7 @@ void main() {
     test("returns the chosen id when the user picks 'a' then 1", () {
       final answers = ['a', '1'].iterator;
       final picked = InitCommand.pickProjectFromList(
-        [_p('a', 'Alpha', 'owner'), _p('b', 'Beta', 'reviewer')],
+        [p('a', 'Alpha', 'owner'), p('b', 'Beta', 'reviewer')],
         readLine: () => (answers..moveNext()).current,
         writeLine: (_) {},
       );
@@ -131,7 +131,7 @@ void main() {
       final answers = ['a', '99', '2'].iterator;
       final writes = <String>[];
       final picked = InitCommand.pickProjectFromList(
-        [_p('a', 'Alpha', 'owner'), _p('b', 'Beta', 'reviewer')],
+        [p('a', 'Alpha', 'owner'), p('b', 'Beta', 'reviewer')],
         readLine: () => (answers..moveNext()).current,
         writeLine: writes.add,
       );
@@ -141,7 +141,7 @@ void main() {
 
     test('returns null on EOF (readLine returns null)', () {
       final picked = InitCommand.pickProjectFromList(
-        [_p('a', 'Alpha', 'owner')],
+        [p('a', 'Alpha', 'owner')],
         readLine: () => null,
         writeLine: (_) {},
       );

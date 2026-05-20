@@ -32,7 +32,7 @@ class Bundle {
           .map((e) => StringEntry.fromJson(
                 (e as Map).cast<String, dynamic>(),
                 sourceLocale: sourceLocale,
-              ))
+              ),)
           .toList(growable: false),
       createdAt: DateTime.parse(json['createdAt'] as String),
     );

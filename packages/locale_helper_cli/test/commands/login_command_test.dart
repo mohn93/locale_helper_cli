@@ -24,7 +24,7 @@ void main() {
           ..write(jsonEncode({
             'token': 'tok-login',
             'user': {'id': 'u1', 'email': 'a@b.com'},
-          }));
+          }),);
         await req.response.close();
       } else if (req.uri.path == '/api/auth/signup' && req.method == 'POST') {
         req.response
@@ -33,7 +33,7 @@ void main() {
           ..write(jsonEncode({
             'token': 'tok-signup',
             'user': {'id': 'u2', 'email': 'new@b.com'},
-          }));
+          }),);
         await req.response.close();
       } else if (req.uri.path == '/api/auth/logout' && req.method == 'POST') {
         req.response

@@ -29,7 +29,7 @@ void main() {
                     'key': 'a',
                     'proposedValue': 'x',
                     'status': 'pending',
-                    'createdAt': '2026-05-12T00:00:00Z'
+                    'createdAt': '2026-05-12T00:00:00Z',
                   },
                   {
                     'id': '2',
@@ -37,11 +37,11 @@ void main() {
                     'key': 'b',
                     'proposedValue': 'y',
                     'status': 'accepted',
-                    'createdAt': '2026-05-12T00:00:00Z'
+                    'createdAt': '2026-05-12T00:00:00Z',
                   },
                 ],
               })
-            : '{"error":"unauthorized"}');
+            : '{"error":"unauthorized"}',);
       await req.response.close();
     });
     return server;

@@ -40,7 +40,7 @@ class StatusCommand implements CliCommand {
     final cred = store.read(cfg.backendUrl);
     if (cred == null) {
       stderr.writeln(
-          'No credentials for ${cfg.backendUrl}. Run `locale_helper login`.');
+          'No credentials for ${cfg.backendUrl}. Run `locale_helper login`.',);
       return 1;
     }
 
@@ -50,7 +50,7 @@ class StatusCommand implements CliCommand {
       edits = await api.listAllEdits(cfg.projectId!);
     } on http.ClientException catch (e) {
       stderr.writeln(
-          'error: cannot reach backend at ${cfg.backendUrl}: ${e.message}');
+          'error: cannot reach backend at ${cfg.backendUrl}: ${e.message}',);
       return 1;
     } on StateError catch (e) {
       if (e.message == '401') {
@@ -68,7 +68,9 @@ class StatusCommand implements CliCommand {
     final counts = <EditStatus, int>{
       for (final s in EditStatus.values) s: 0,
     };
-    for (final e in edits) counts[e.status] = counts[e.status]! + 1;
+    for (final e in edits) {
+      counts[e.status] = counts[e.status]! + 1;
+    }
 
     _out.writeln('Project:   ${cfg.projectId}');
     _out.writeln('Backend:   ${cfg.backendUrl}');

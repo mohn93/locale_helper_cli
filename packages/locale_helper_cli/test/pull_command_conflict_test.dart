@@ -25,7 +25,7 @@ void main() {
         ..headers.contentType = ContentType.json
         ..write(statusCode == 200
             ? jsonEncode({'currentValues': currentValues, 'changes': []})
-            : '{"error":"server"}');
+            : '{"error":"server"}',);
       await req.response.close();
     });
   }
@@ -45,7 +45,7 @@ void main() {
     addTearDown(() => homeDir.deleteSync(recursive: true));
     final store = CredentialsStore(homeDir: homeDir.path);
     store.save(
-        backendUrl: backendUrl, email: 'dev@test.com', token: 'bearer-tok');
+        backendUrl: backendUrl, email: 'dev@test.com', token: 'bearer-tok',);
     return store;
   }
 
@@ -76,7 +76,7 @@ void main() {
     await startServer(currentValues: {'hello': 'Hello'});
     final tmp = await setupProject(arbContent: '''
 {"@@locale":"en","hello":"Hello"}
-''');
+''',);
     writeBaseline(tmp.path, {'hello': 'Hello'});
     final backendUrl = 'http://localhost:${server.port}';
     writeConfig(tmp, backendUrl);
@@ -105,7 +105,7 @@ void main() {
     await startServer(currentValues: {'hello': 'Hi there'});
     final tmp = await setupProject(arbContent: '''
 {"@@locale":"en","hello":"Hello"}
-''');
+''',);
     // Baseline matches current local.
     writeBaseline(tmp.path, {'hello': 'Hello'});
     final backendUrl = 'http://localhost:${server.port}';
@@ -136,7 +136,7 @@ void main() {
     await startServer(currentValues: {'hello': 'Hello'});
     final tmp = await setupProject(arbContent: '''
 {"@@locale":"en","hello":"Howdy partner"}
-''');
+''',);
     writeBaseline(tmp.path, {'hello': 'Hello'});
     final backendUrl = 'http://localhost:${server.port}';
     writeConfig(tmp, backendUrl);
@@ -168,7 +168,7 @@ void main() {
     // ARB has only "hello".
     final tmp = await setupProject(arbContent: '''
 {"@@locale":"en","hello":"Hello"}
-''');
+''',);
     // Baseline says "extra" used to exist.
     writeBaseline(tmp.path, {'hello': 'Hello', 'extra': 'Surprise'});
     final backendUrl = 'http://localhost:${server.port}';
@@ -194,7 +194,7 @@ void main() {
     await startServer(currentValues: {'hello': 'Hi there'});
     final tmp = await setupProject(arbContent: '''
 {"@@locale":"en","hello":"Hey friend"}
-''');
+''',);
     writeBaseline(tmp.path, {'hello': 'Hello'}); // diverges from both sides
     final backendUrl = 'http://localhost:${server.port}';
     writeConfig(tmp, backendUrl);
@@ -220,7 +220,7 @@ void main() {
     await startServer(currentValues: {'hello': 'Hi'});
     final tmp = await setupProject(arbContent: '''
 {"@@locale":"en","hello":"Hello"}
-''');
+''',);
     final backendUrl = 'http://localhost:${server.port}';
     writeConfig(tmp, backendUrl);
     final credStore = await seededCredentials(backendUrl);

@@ -9,7 +9,7 @@ void main() {
 
     test('Arabic: zero, one, two, few, many, other', () {
       expect(cldrFormsFor('ar'),
-          ['zero', 'one', 'two', 'few', 'many', 'other']);
+          ['zero', 'one', 'two', 'few', 'many', 'other'],);
     });
 
     test('Russian: one, few, many, other', () {

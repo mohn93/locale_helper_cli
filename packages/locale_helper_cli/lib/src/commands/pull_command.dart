@@ -71,7 +71,7 @@ class PullCommand implements CliCommand {
     final cfg = ProjectConfig.load(cfgPath);
     if (cfg.projectId == null) {
       stderr.writeln(
-          'Project not published yet. Run `locale_helper publish` first.');
+          'Project not published yet. Run `locale_helper publish` first.',);
       return 1;
     }
 
@@ -79,7 +79,7 @@ class PullCommand implements CliCommand {
     final cred = store.read(cfg.backendUrl);
     if (cred == null) {
       stderr.writeln(
-          'No credentials for ${cfg.backendUrl}. Run `locale_helper login`.');
+          'No credentials for ${cfg.backendUrl}. Run `locale_helper login`.',);
       return 1;
     }
 
@@ -87,10 +87,10 @@ class PullCommand implements CliCommand {
     final Map<String, Map<String, String>> serverValues;
     try {
       serverValues = await api.currentValues(cfg.projectId!,
-          fallbackLocale: cfg.sourceLocale);
+          fallbackLocale: cfg.sourceLocale,);
     } on http.ClientException catch (e) {
       stderr.writeln(
-          'error: cannot reach backend at ${cfg.backendUrl}: ${e.message}');
+          'error: cannot reach backend at ${cfg.backendUrl}: ${e.message}',);
       return 1;
     } on StateError catch (e) {
       if (e.message == '401') {
@@ -124,7 +124,7 @@ class PullCommand implements CliCommand {
     }
 
     final baseline = BaselineLock.read(workingDir,
-        sourceLocale: cfg.sourceLocale);
+        sourceLocale: cfg.sourceLocale,);
     if (baseline == null) {
       stdout.writeln(
         'No baseline.lock found — treating local ARB as the baseline. '
@@ -186,7 +186,7 @@ class PullCommand implements CliCommand {
           baselineValue: baseVal,
           localValue: localVal,
           serverValue: serverVal,
-        ));
+        ),);
       }
       diffsByLocale[locale] = diffs;
     }
@@ -282,7 +282,7 @@ class PullCommand implements CliCommand {
           (diffs.isNotEmpty &&
               diffs.any((d) =>
                   d.status == _PullStatus.conflict ||
-                  d.status == _PullStatus.incoming));
+                  d.status == _PullStatus.incoming,));
 
       if (existing != null && touched) {
         final updated = existing.withReplacements(replacements);
@@ -350,7 +350,7 @@ class PullCommand implements CliCommand {
       stdout.writeln('Incoming (server changed, local untouched):');
       for (final d in incoming) {
         stdout.writeln(
-            '  ~ ${d.key}: "${d.localValue}" -> "${d.serverValue}"');
+            '  ~ ${d.key}: "${d.localValue}" -> "${d.serverValue}"',);
       }
     }
     if (conflicts.isNotEmpty) {
@@ -364,15 +364,15 @@ class PullCommand implements CliCommand {
     }
     if (localOnly.isNotEmpty) {
       stdout.writeln(
-          '\nLocal-only (will go up at next publish):');
+          '\nLocal-only (will go up at next publish):',);
       for (final d in localOnly) {
         stdout.writeln(
-            '  + ${d.key}: "${d.baselineValue}" -> "${d.localValue}"');
+            '  + ${d.key}: "${d.baselineValue}" -> "${d.localValue}"',);
       }
     }
     if (missing.isNotEmpty) {
       stdout.writeln(
-          '\nMissing locally (server has a value, your ARB does not):');
+          '\nMissing locally (server has a value, your ARB does not):',);
       for (final d in missing) {
         stdout.writeln('  ? ${d.key}: server has "${d.serverValue}"');
       }
@@ -391,7 +391,7 @@ class PullCommand implements CliCommand {
   /// Replaces the first `*` in the pattern with the locale code. If the
   /// pattern has no `*` (legacy single-file configs), returns it unchanged.
   static String _arbPathForLocale(
-      String workingDir, String pattern, String locale) {
+      String workingDir, String pattern, String locale,) {
     final patched =
         pattern.contains('*') ? pattern.replaceFirst('*', locale) : pattern;
     return p.join(workingDir, patched);

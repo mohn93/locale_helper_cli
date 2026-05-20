@@ -83,7 +83,7 @@ void main() {
             'projectId': 'p1',
             'reviewUrl': 'http://x/review/p1',
             'settingsUrl': 'http://x/settings/p1',
-          }));
+          }),);
         await req.response.close();
       });
     });
@@ -134,7 +134,7 @@ void main() {
                 'updatedAt': '2026-02-01T00:00:00Z',
               },
             ],
-          }));
+          }),);
         await req.response.close();
       });
     });

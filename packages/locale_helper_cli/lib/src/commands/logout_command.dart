@@ -15,7 +15,7 @@ class LogoutCommand implements CliCommand {
         _clientFactory = clientFactory;
 
   ApiClient _makeClient(String url) =>
-      _clientFactory != null ? _clientFactory!(url) : ApiClient(backendUrl: url);
+      _clientFactory != null ? _clientFactory(url) : ApiClient(backendUrl: url);
 
   @override
   String get name => 'logout';

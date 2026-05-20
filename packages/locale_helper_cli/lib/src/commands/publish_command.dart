@@ -29,7 +29,7 @@ class PublishCommand implements CliCommand {
     final cfgPath = p.join(workingDir, ProjectConfig.defaultPath);
     if (!File(cfgPath).existsSync()) {
       stderr.writeln(
-          'No ${ProjectConfig.defaultPath} found. Run `locale_helper init` first.');
+          'No ${ProjectConfig.defaultPath} found. Run `locale_helper init` first.',);
       return 1;
     }
     final cfg = ProjectConfig.load(cfgPath);
@@ -39,7 +39,7 @@ class PublishCommand implements CliCommand {
     final cred = store.read(cfg.backendUrl);
     if (cred == null) {
       stderr.writeln(
-          'No credentials for ${cfg.backendUrl}. Run `locale_helper login`.');
+          'No credentials for ${cfg.backendUrl}. Run `locale_helper login`.',);
       return 1;
     }
 
@@ -91,11 +91,11 @@ class PublishCommand implements CliCommand {
     // refuse to publish over server-side changes we haven't pulled.
     if (cfg.projectId != null) {
       final baseline = BaselineLock.read(workingDir,
-          sourceLocale: cfg.sourceLocale);
+          sourceLocale: cfg.sourceLocale,);
       if (baseline != null) {
         try {
           final serverValues = await api.currentValues(cfg.projectId!,
-              fallbackLocale: cfg.sourceLocale);
+              fallbackLocale: cfg.sourceLocale,);
           final conflicts = <String>[]; // formatted "locale:key" entries
 
           // Build local values per locale from the inputs.
@@ -152,7 +152,7 @@ class PublishCommand implements CliCommand {
           }
         } on http.ClientException catch (e) {
           stderr.writeln(
-              'warning: could not pre-check server changes: ${e.message}');
+              'warning: could not pre-check server changes: ${e.message}',);
         } on StateError catch (_) {
           // Not authorized to fetch /changes — fall through and let publish
           // surface the real error.
@@ -190,7 +190,7 @@ class PublishCommand implements CliCommand {
       return 0;
     } on http.ClientException catch (e) {
       stderr.writeln(
-          'error: cannot reach backend at ${cfg.backendUrl}: ${e.message}');
+          'error: cannot reach backend at ${cfg.backendUrl}: ${e.message}',);
       return 1;
     } on StateError catch (e) {
       if (e.message == '401') {

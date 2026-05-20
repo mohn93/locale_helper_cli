@@ -29,7 +29,7 @@ void main() {
           ..write(jsonEncode({
             'currentValues': serverCurrentValues,
             'changes': const <Map<String, dynamic>>[],
-          }));
+          }),);
         await req.response.close();
         return;
       }
@@ -44,7 +44,7 @@ void main() {
             'projectId': 'existing-p1',
             'reviewUrl': 'http://x/review/p1',
             'settingsUrl': 'http://x/settings/p1',
-          }));
+          }),);
         await req.response.close();
         return;
       }

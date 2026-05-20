@@ -33,7 +33,7 @@ void main() {
                   'reviewUrl': 'http://x/review/p1',
                   'settingsUrl': 'http://x/settings/p1',
                 })
-              : '{"error":"unauthorized"}');
+              : '{"error":"unauthorized"}',);
         await req.response.close();
       } else if (req.uri.path.endsWith('/changes')) {
         // Pre-check endpoint used by the conflict-detection pre-check.
