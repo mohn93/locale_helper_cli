@@ -1,13 +1,23 @@
 name: locale_helper_cli
-description: CLI for locale_helper.
-publish_to: none
+version: 0.1.0
+description: >-
+  Translation review for Flutter apps. Publish your ARB strings to non-developer
+  reviewers at locale.ly, then pull approved changes back into your codebase.
+repository: https://github.com/mohn93/locale_helper_cli
+homepage: https://locale.ly
+topics:
+  - flutter
+  - localization
+  - i18n
+  - arb
+  - translation
 environment:
   sdk: ^3.6.0
 resolution: workspace
 executables:
   locale_helper: locale_helper
 dependencies:
-  locale_helper_shared:
+  locale_helper_shared: ^0.1.0
   analyzer: ^8.0.0
   args: ^2.5.0
   glob: ^2.1.2

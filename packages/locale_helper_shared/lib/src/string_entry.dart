@@ -4,6 +4,44 @@ import 'review_state_dto.dart';
 import 'role.dart';
 import 'usage.dart';
 
+enum IcuKind {
+  plain,
+  placeholder,
+  plural,
+  unsupported;
+
+  static IcuKind fromWire(String? s) {
+    return switch (s) {
+      'placeholder' => IcuKind.placeholder,
+      'plural' => IcuKind.plural,
+      'unsupported' => IcuKind.unsupported,
+      _ => IcuKind.plain,
+    };
+  }
+
+  String toWire() => name;
+}
+
+class PlaceholderMeta {
+  final String name;
+
+  /// Type hint from the source ARB's `@key.placeholders` (e.g. 'int',
+  /// 'String', 'DateTime'). Null when unspecified.
+  final String? type;
+  const PlaceholderMeta({required this.name, this.type});
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        if (type != null) 'type': type,
+      };
+
+  factory PlaceholderMeta.fromJson(Map<String, dynamic> json) =>
+      PlaceholderMeta(
+        name: json['name'] as String,
+        type: json['type'] as String?,
+      );
+}
+
 /// One string in the bundle. The string lives in every locale the project
 /// tracks; `values` maps locale → translation. A locale may map to null when
 /// no translation exists yet (the reviewer is being asked to translate from
@@ -22,6 +60,8 @@ class StringEntry {
   final Role role;
   final ReviewStateDto? myReviewState;
   final int? commentCount;
+  final IcuKind icuKind;
+  final Map<String, PlaceholderMeta> placeholders;
 
   /// The locale that this entry treats as canonical (for `sourceValue`).
   /// Carried so DTOs round-trip cleanly without needing to thread the
@@ -38,6 +78,8 @@ class StringEntry {
     this.role = Role.other,
     this.myReviewState,
     this.commentCount,
+    this.icuKind = IcuKind.plain,
+    this.placeholders = const {},
   });
 
   String get sourceValue => values[sourceLocale] ?? '';
@@ -81,6 +123,11 @@ class StringEntry {
           ? ReviewStateDto.fromJson((reviewRaw).cast<String, dynamic>())
           : null,
       commentCount: json['commentCount'] as int?,
+      icuKind: IcuKind.fromWire(json['icuKind'] as String?),
+      placeholders: (json['placeholders'] as Map<String, dynamic>?)
+              ?.map((k, v) => MapEntry(
+                  k, PlaceholderMeta.fromJson(v as Map<String, dynamic>))) ??
+          const {},
     );
   }
 
@@ -94,6 +141,11 @@ class StringEntry {
         'role': role.toWire(),
         if (myReviewState != null) 'myReviewState': myReviewState!.toJson(),
         if (commentCount != null) 'commentCount': commentCount,
+        if (icuKind != IcuKind.plain) 'icuKind': icuKind.toWire(),
+        if (placeholders.isNotEmpty)
+          'placeholders': {
+            for (final e in placeholders.entries) e.key: e.value.toJson(),
+          },
       };
 
   StringEntry copyWith({
@@ -103,6 +155,8 @@ class StringEntry {
     Role? role,
     ReviewStateDto? myReviewState,
     int? commentCount,
+    IcuKind? icuKind,
+    Map<String, PlaceholderMeta>? placeholders,
   }) {
     Map<String, String?> nextValues;
     if (values != null) {
@@ -122,6 +176,8 @@ class StringEntry {
       role: role ?? this.role,
       myReviewState: myReviewState ?? this.myReviewState,
       commentCount: commentCount ?? this.commentCount,
+      icuKind: icuKind ?? this.icuKind,
+      placeholders: placeholders ?? this.placeholders,
     );
   }
 

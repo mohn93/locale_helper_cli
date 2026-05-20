@@ -107,4 +107,89 @@ void main() {
       expect(receivedHeaders.containsKey('x-owner-token'), isFalse);
     });
   });
+
+  group('ApiClient listMyProjects', () {
+    late HttpServer server;
+
+    setUp(() async {
+      server = await HttpServer.bind('localhost', 0);
+      server.listen((req) async {
+        req.response
+          ..statusCode = 200
+          ..headers.contentType = ContentType.json
+          ..write(jsonEncode({
+            'projects': [
+              {
+                'id': 'a',
+                'name': 'Alpha',
+                'myRole': 'owner',
+                'unreviewedCount': 0,
+                'updatedAt': '2026-01-01T00:00:00Z',
+              },
+              {
+                'id': 'b',
+                'name': 'Beta',
+                'myRole': 'reviewer',
+                'unreviewedCount': 3,
+                'updatedAt': '2026-02-01T00:00:00Z',
+              },
+            ],
+          }));
+        await req.response.close();
+      });
+    });
+
+    tearDown(() => server.close(force: true));
+
+    test('returns parsed list from /api/projects', () async {
+      final api = ApiClient(
+        backendUrl: 'http://localhost:${server.port}',
+        token: 'tok',
+      );
+
+      final list = await api.listMyProjects();
+
+      expect(list.length, 2);
+      expect(list[0].id, 'a');
+      expect(list[0].name, 'Alpha');
+      expect(list[0].myRole, 'owner');
+      expect(list[0].unreviewedCount, 0);
+      expect(list[1].id, 'b');
+      expect(list[1].name, 'Beta');
+      expect(list[1].myRole, 'reviewer');
+      expect(list[1].unreviewedCount, 3);
+    });
+
+    test('throws StateError on 401', () async {
+      server.close(force: true);
+      server = await HttpServer.bind('localhost', 0);
+      server.listen((req) async {
+        req.response.statusCode = 401;
+        await req.response.close();
+      });
+
+      final api = ApiClient(
+        backendUrl: 'http://localhost:${server.port}',
+        token: 'tok',
+      );
+
+      expect(api.listMyProjects, throwsStateError);
+    });
+
+    test('throws StateError on 403', () async {
+      server.close(force: true);
+      server = await HttpServer.bind('localhost', 0);
+      server.listen((req) async {
+        req.response.statusCode = 403;
+        await req.response.close();
+      });
+
+      final api = ApiClient(
+        backendUrl: 'http://localhost:${server.port}',
+        token: 'tok',
+      );
+
+      expect(api.listMyProjects, throwsStateError);
+    });
+  });
 }

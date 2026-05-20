@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:locale_helper_cli/src/commands/init_command.dart';
+import 'package:locale_helper_shared/locale_helper_shared.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
@@ -80,5 +81,71 @@ void main() {
     final lines = body.split('\n').map((l) => l.trim()).toList();
     expect(lines, contains('build/'));
     expect(lines, contains('.locale_helper/'));
+  });
+
+  group('InitCommand.pickProjectFromList', () {
+    ProjectListItemDto _p(String id, String name, String role) =>
+        ProjectListItemDto(
+          id: id,
+          name: name,
+          myRole: role,
+          unreviewedCount: 0,
+          updatedAt: DateTime.parse('2026-01-01T00:00:00Z'),
+        );
+
+    test('returns null and writes nothing when the list is empty', () {
+      final writes = <String>[];
+      final picked = InitCommand.pickProjectFromList(
+        const [],
+        readLine: () => null,
+        writeLine: writes.add,
+      );
+      expect(picked, isNull);
+      expect(writes, isEmpty);
+    });
+
+    test("returns null when the user chooses 'n'", () {
+      final writes = <String>[];
+      final answers = ['n'].iterator;
+      final picked = InitCommand.pickProjectFromList(
+        [_p('a', 'Alpha', 'owner'), _p('b', 'Beta', 'reviewer')],
+        readLine: () => (answers..moveNext()).current,
+        writeLine: writes.add,
+      );
+      expect(picked, isNull);
+      expect(writes.any((l) => l.contains('Alpha')), isTrue);
+      expect(writes.any((l) => l.contains('Beta')), isTrue);
+    });
+
+    test("returns the chosen id when the user picks 'a' then 1", () {
+      final answers = ['a', '1'].iterator;
+      final picked = InitCommand.pickProjectFromList(
+        [_p('a', 'Alpha', 'owner'), _p('b', 'Beta', 'reviewer')],
+        readLine: () => (answers..moveNext()).current,
+        writeLine: (_) {},
+      );
+      expect(picked, 'a');
+    });
+
+    test('re-prompts when the user enters an out-of-range index', () {
+      final answers = ['a', '99', '2'].iterator;
+      final writes = <String>[];
+      final picked = InitCommand.pickProjectFromList(
+        [_p('a', 'Alpha', 'owner'), _p('b', 'Beta', 'reviewer')],
+        readLine: () => (answers..moveNext()).current,
+        writeLine: writes.add,
+      );
+      expect(picked, 'b');
+      expect(writes.any((l) => l.toLowerCase().contains('invalid')), isTrue);
+    });
+
+    test('returns null on EOF (readLine returns null)', () {
+      final picked = InitCommand.pickProjectFromList(
+        [_p('a', 'Alpha', 'owner')],
+        readLine: () => null,
+        writeLine: (_) {},
+      );
+      expect(picked, isNull);
+    });
   });
 }

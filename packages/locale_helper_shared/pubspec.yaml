@@ -1,6 +1,15 @@
 name: locale_helper_shared
-description: Shared data models for locale_helper.
-publish_to: none
+version: 0.1.0
+description: >-
+  Shared data models and ARB/ICU/CLDR helpers used by the locale_helper CLI and
+  the locale.ly review backend. Pure Dart, no platform dependencies.
+repository: https://github.com/mohn93/locale_helper_cli
+homepage: https://locale.ly
+topics:
+  - flutter
+  - localization
+  - i18n
+  - arb
 environment:
   sdk: ^3.6.0
 resolution: workspace

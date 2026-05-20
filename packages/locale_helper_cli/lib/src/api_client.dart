@@ -156,4 +156,25 @@ class ApiClient {
         .map(Edit.fromJson)
         .toList();
   }
+
+  Future<List<ProjectListItemDto>> listMyProjects() async {
+    final resp = await httpClient.get(
+      Uri.parse('$backendUrl/api/projects'),
+      headers: {..._authHeaders},
+    );
+    if (resp.statusCode == 401) {
+      throw StateError('401');
+    }
+    if (resp.statusCode == 403) {
+      throw StateError('403');
+    }
+    if (resp.statusCode != 200) {
+      throw StateError('list projects failed: ${resp.statusCode} ${resp.body}');
+    }
+    final body = jsonDecode(resp.body) as Map<String, dynamic>;
+    return (body['projects'] as List)
+        .cast<Map<String, dynamic>>()
+        .map(ProjectListItemDto.fromJson)
+        .toList();
+  }
 }

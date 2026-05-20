@@ -54,4 +54,32 @@ void main() {
     // original unchanged
     expect(entry.role, Role.other);
   });
+
+  test('StringEntry has icuKind + placeholders fields with sensible defaults',
+      () {
+    final e = StringEntry(
+      key: 'greeting',
+      sourceLocale: 'en',
+      values: const {'en': 'Hello'},
+    );
+    expect(e.icuKind, IcuKind.plain);
+    expect(e.placeholders, isEmpty);
+  });
+
+  test('StringEntry round-trips icuKind + placeholders via JSON', () {
+    final e = StringEntry(
+      key: 'itemCount',
+      sourceLocale: 'en',
+      values: const {'en': '{count, plural, one {item} other {items}}'},
+      icuKind: IcuKind.plural,
+      placeholders: const {
+        'count': PlaceholderMeta(name: 'count', type: 'int'),
+      },
+    );
+    final decoded =
+        StringEntry.fromJson(e.toJson(), sourceLocale: 'en');
+    expect(decoded.icuKind, IcuKind.plural);
+    expect(decoded.placeholders.keys, ['count']);
+    expect(decoded.placeholders['count']!.type, 'int');
+  });
 }
